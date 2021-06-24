@@ -1,0 +1,75 @@
+{
+  "firewoodItems": [
+    {
+      "id": 0,
+      "name": "branches",
+      "imageSrc": "branches.jpg",
+      "combustionFactor": 1.2,
+      "firewoodContribution": 20,
+      "price": 100,
+      "itemType": "Firewood",
+      "inStock":20
+    },
+    {
+      "id": 1,
+      "name": "log",
+      "imageSrc": "log.jpg",
+      "combustionFactor": 0.7,
+      "firewoodContribution": 50,
+      "price": 200,
+      "itemType": "Firewood",
+      "inStock":15
+    }
+  ],
+  "flammableItems": [
+    {
+      "id": 2,
+      "name": "log",
+      "imageSrc": "log.jpg",
+      "flameIncrement":20,
+      "flameIncrementDuration":60,
+      "price": 100,
+      "inStock":2
+    }
+  ],
+  "users": [
+    {
+      "username": "aleksa",
+      "password": "1234",
+      "gameInfo": null,
+      "inventory": [
+        {
+          "item": 0,
+          "quantity": 10
+        },
+        {
+          "item": 1,
+          "quantity": 4
+        }
+      ]
+    },
+    {
+      "username": "ognjen",
+      "password": "1234",
+      "gameInfo": null,
+      "inventory": {
+        "flammableItems": [
+          {
+            "item": 3,
+            "quantity": 5
+          }
+        ],
+        "firewoodItems": [
+          {
+            "item": 0,
+            "quantity": 10
+          },
+          {
+            "item": 1,
+            "quantity": 7
+          }
+        ]
+      }
+    }
+  ]
+}

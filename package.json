@@ -1,0 +1,32 @@
+{
+  "name": "keep-it-lit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch",
+    "api": "json-server --watch db.json --routes routes.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OgnjenDamnjanovic/Keep-It-Lit.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OgnjenDamnjanovic/Keep-It-Lit/issues"
+  },
+  "homepage": "https://github.com/OgnjenDamnjanovic/Keep-It-Lit#readme",
+  "devDependencies": {
+    "ts-loader": "^9.2.3",
+    "typescript": "^4.3.4",
+    "webpack": "^5.39.1",
+    "webpack-cli": "^4.7.2"
+  },
+  "dependencies": {
+    "json-server": "^0.16.3",
+    "rxjs": "^7.1.0"
+  }
+}
