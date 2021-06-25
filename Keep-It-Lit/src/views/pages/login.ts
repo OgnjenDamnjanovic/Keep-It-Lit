@@ -1,5 +1,6 @@
 import { ErrorCodes } from "../../misc/ErrorCodes";
-import { userLogin } from "../../services/DB services/user.service";
+import { Page } from "../../misc/Page";
+import { getUserObs } from "../../services/DB services/user.service";
 import {
   createButton,
   createElement,
@@ -11,24 +12,24 @@ export class Login {
   private _container: HTMLFormElement;
   constructor(mainContainer: HTMLElement) {
     this._container = <HTMLFormElement>(
-      createElement("form", mainContainer, "homeForm", "")
+      createElement("form", mainContainer, "loginForm", "")
     );
   }
   renderContent() {
     createElement(
       "h2",
       this._container,
-      "homeHeadline",
+      "loginHeadline",
       "ENTER YOUR CREDENTIALS:"
     );
-    const usernemeElement = createInput(
+    const usernameInput:HTMLInputElement = createInput(
       "text",
       this._container,
       "loginInput",
       true,
       "Username"
     );
-    const passwordElement = createInput(
+    const passwordInput:HTMLInputElement = createInput(
       "password",
       this._container,
       "loginInput",
@@ -37,7 +38,7 @@ export class Login {
     );
     createButton(this._container, "loginSubmitBtn", "Login", null);
     this._container.onsubmit = () => {
-      userLogin(usernemeElement.value, passwordElement.value).subscribe({
+      getUserObs(usernameInput.value, passwordInput.value).subscribe({
         //predlozeno u dokumentaciji za kad se handle greska
         next: (v) => console.log(v),
         error: (e) => {
@@ -48,5 +49,7 @@ export class Login {
 
       return false;
     };
+    const noAcc:HTMLAnchorElement=<HTMLAnchorElement>createElement('a',this._container,'dontHaveAcc','I don\'t have an acount');
+    noAcc.onclick=()=>Router.Navigator.goTo(Page.Register)
   }
 }

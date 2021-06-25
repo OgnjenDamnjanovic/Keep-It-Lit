@@ -4,6 +4,7 @@ import { Page } from "../misc/Page";
 import { Game } from "./pages/game";
 import { Home } from "./pages/home";
 import { Login } from "./pages/login";
+import { Register } from "./pages/register";
 
 export class Router {
   private _mainContainer: HTMLElement;
@@ -31,6 +32,9 @@ export class Router {
         break;
       case Page.Login:
         new Login(this._mainContainer).renderContent();
+        break;
+      case Page.Register:
+        new Register(this._mainContainer).renderContent();
     }
   }
   clearMainContainer() {

@@ -1,4 +1,32 @@
-.homeForm{
+.registerError, .passwordError{
+  align-self: center;
+  font-size: 10px;
+}
+.errorHidden{
+  visibility: hidden;
+}
+.errorVisible{
+  visibility: visible;
+}
+.backArrow{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 30px;
+  color: #ccc6c6;
+  cursor: pointer;
+}
+.dontHaveAcc{
+  align-self: center;
+  text-decoration: underline;
+  color: rgb(85, 85, 248);
+  cursor: pointer;
+  margin-top:10px;
+}
+
+
+
+.loginForm,.registerForm{
   display: flex;
   flex-direction: column;
   background-color: rgb(255, 185, 88);
@@ -12,12 +40,8 @@
   border-radius: 10px; 
 
 }
-.homeForm *{
-  margin: 7px;
-  
-}
 
-.loginInput{
+.loginInput,.registerInput{
   font-size: 17px;
   width: 30%;
   align-self: center;
@@ -25,14 +49,16 @@
   border-radius: 3px;
   border: 2px rgb(204, 132, 32);
   border-style: solid;
-
-
+  margin: 7px;
 }
-.homeForm>h2{
+.registerInput:nth-child(3){
+  margin:0px;
+}
+.loginForm>h2, .registerForm>h2{
   margin-bottom: 30px;
   align-self: center;
 }
-.loginSubmitBtn{
+.loginSubmitBtn,.registerSubmitBtn{
   
   height: 28px;
   width: 13%;

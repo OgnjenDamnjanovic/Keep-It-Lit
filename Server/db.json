@@ -1,0 +1,117 @@
+{
+  "firewoodItems": [
+    {
+      "id": 0,
+      "name": "branches",
+      "imageSrc": "branches.jpg",
+      "combustionFactor": 1.2,
+      "firewoodContribution": 20,
+      "price": 100,
+      "itemType": "Firewood",
+      "inStock": 20
+    },
+    {
+      "id": 1,
+      "name": "log",
+      "imageSrc": "log.jpg",
+      "combustionFactor": 0.7,
+      "firewoodContribution": 50,
+      "price": 200,
+      "itemType": "Firewood",
+      "inStock": 15
+    }
+  ],
+  "flammableItems": [
+    {
+      "id": 2,
+      "name": "log",
+      "imageSrc": "log.jpg",
+      "flameIncrement": 20,
+      "flameIncrementDuration": 60,
+      "price": 100,
+      "inStock": 2
+    }
+  ],
+  "users": [
+    {
+      "id": 0,
+      "username": "ognjen",
+      "password": "1234",
+      "gameInfo": null,
+      "balance": 200,
+      "inventory": {
+        "flammableItems": [
+          {
+            "item": 2,
+            "quantity": 5
+          }
+        ],
+        "firewoodItems": [
+          {
+            "item": 0,
+            "quantity": 10
+          },
+          {
+            "item": 1,
+            "quantity": 7
+          }
+        ]
+      }
+    },
+    {
+      "username": "ognjen2",
+      "password": "1234",
+      "gameInfo": null,
+      "balance": 200,
+      "inventory": {
+        "firewoodItems": [],
+        "flammableItems": []
+      },
+      "id": 1
+    },
+    {
+      "username": "ognjen3",
+      "password": "1234",
+      "gameInfo": null,
+      "balance": 200,
+      "inventory": {
+        "firewoodItems": [],
+        "flammableItems": []
+      },
+      "id": 2
+    },
+    {
+      "id": 3,
+      "username": "ognjen4",
+      "password": "1234",
+      "gameInfo": null,
+      "balance": 200,
+      "inventory": {
+        "firewoodItems": [],
+        "flammableItems": []
+      }
+    },
+    {
+      "id": 4,
+      "username": "3211",
+      "password": "1",
+      "gameInfo": null,
+      "balance": 200,
+      "inventory": {
+        "firewoodItems": [],
+        "flammableItems": []
+      }
+    },
+    {
+      "id": 5,
+      "username": "ognjen123",
+      "password": "123",
+      "gameInfo": null,
+      "balance": 200,
+      "inventory": {
+        "firewoodItems": [],
+        "flammableItems": []
+      }
+    }
+  ]
+}
