@@ -1,5 +1,4 @@
-import { map } from "rxjs/operators";
-import { DisposableView } from "../misc/DisposableView";
+import { DisposableView } from "./page-interfaces/DisposableView";
 import { Page } from "../misc/Page";
 import { Game } from "./pages/game";
 import { Home } from "./pages/home";
@@ -17,7 +16,7 @@ export class Router {
   static get Navigator(): Router {
     return this._navigator ?? (this._navigator = new Router());
   }
-  goTo(pageName: Page) {
+  goTo(pageName: Page,pageParam:any=null) {
     this.clearMainContainer();
     this.disposeSubscriptions();
     switch (pageName) {
@@ -25,7 +24,7 @@ export class Router {
         new Home(this._mainContainer).renderContent();
         break;
       case Page.Game:
-        const game=new Game(this._mainContainer);
+        const game=new Game(this._mainContainer,Game.anyToPageParameter(pageParam));
         this.pageToDispose=game;
         game.renderContent()
         

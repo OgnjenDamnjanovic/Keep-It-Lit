@@ -1,22 +1,30 @@
-import { from, Observable, of, zip } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { combineLatest, forkJoin, from, Observable, of, zip } from "rxjs";
+import { map, share, switchMap, withLatestFrom } from "rxjs/operators";
 import { USERS_URL } from "../../misc/API URLs";
 import { ErrorCodes } from "../../misc/ErrorCodes";
 import { inventoryDTOtoInventoryObs } from "../../models/DTOs/inventory-dto";
-import { createInitialUserDTO, UserDTO, userDTOtoUser } from "../../models/DTOs/user-dto";
+import {
+  createInitialUserDTO,
+  UserDTO,
+  userDTOtoUser,
+  userToUserDTO,
+} from "../../models/DTOs/user-dto";
 import { Inventory } from "../../models/inventory";
 import { User } from "../../models/user";
 
-export function createUser(username: string, password: string) {
+export function createUser(
+  username: string,
+  password: string
+): Observable<Response> {
   return from(
     fetch("http://localhost:3000/users", {
       method: "POST",
-      body: JSON.stringify(createInitialUserDTO(username,password)),
+      body: JSON.stringify(createInitialUserDTO(username, password)),
       headers: {
         "Content-Type": "application/json",
       },
     })
-  )
+  );
 }
 export function getUserDtoObs(
   username: string,
@@ -36,7 +44,8 @@ export function getUserObs(
     map((userDto) => {
       if (!userDto) throw new Error(ErrorCodes.userNotFound.toString());
       return userDto;
-    })
+    }),
+    share()
   );
   return zip(
     userDtoObs.pipe(
@@ -55,4 +64,18 @@ export function checkUsernameExistsObs(username: string): Observable<boolean> {
   return from(
     fetch(USERS_URL + `?username=${username}`).then((result) => result.json())
   ).pipe(map((users: Array<UserDTO>) => users[0] != null));
+}
+export function updateUserObs(user: User): Observable<Response> {
+  return from(
+    fetch("http://localhost:3000/users/" + user.id, {
+      method: "PUT",
+      body: JSON.stringify(userToUserDTO(user)),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      if (!response.ok) throw Error(ErrorCodes.userNotFound.toString());
+      return response;
+    })
+  );
 }

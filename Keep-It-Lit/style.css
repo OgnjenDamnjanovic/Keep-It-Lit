@@ -2,6 +2,46 @@
   align-self: center;
   font-size: 10px;
 }
+.storeContainer{
+  max-width: 205px;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  border: 2px dotted rgb(255, 150, 12);
+  padding: 10px;
+  flex-wrap: wrap;
+   
+}
+.storeContainer>span{
+  width: fit-content;
+  cursor: pointer;
+  border: 1px solid rgb(255, 116, 74);
+  margin:3px;
+  border-radius: 5px;
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  
+  
+}
+.storeContainer>span label{
+  margin-left: 20px;
+}
+
+.storeitemImage{
+  margin-left: 2px;
+  border-bottom: 1px dotted rgb(122, 122, 122);
+  margin-bottom: 3px;
+}
+.storeItemPrice{
+  margin-bottom: 3px;
+ 
+  
+}
+.fa-coins{
+  color:rgba(255, 217, 0, 0.856);
+}
 .errorHidden{
   visibility: hidden;
 }

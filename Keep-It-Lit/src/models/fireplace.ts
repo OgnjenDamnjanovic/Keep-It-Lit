@@ -5,6 +5,6 @@ export interface Fireplace{
     firewood: Dictionary<FirewoodComponent>
     emberAmount: number,
     fireLevel:number
-    firewoodToEmberConversion:Function,
-    emberToAshConversion:Function
+   // firewoodToEmberConversion:Function,
+   // emberToAshConversion:Function
 }

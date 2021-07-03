@@ -8,7 +8,7 @@ export function createElement(elementType:string, parentElement: HTMLElement, cl
 
 }
 
-export function createButton(parentElement: HTMLElement, className: string, innerHTML: string, onClick:Function):HTMLButtonElement{
+export function createButton(parentElement: HTMLElement, className: string, innerHTML: string, onClick:Function|null):HTMLButtonElement{
     const newButton=<HTMLButtonElement>createElement('button',parentElement,className,innerHTML);
     newButton.onclick=()=>{
         if(onClick)

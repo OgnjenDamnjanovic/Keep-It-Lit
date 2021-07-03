@@ -6,8 +6,7 @@
       "imageSrc": "branches.jpg",
       "combustionFactor": 1.2,
       "firewoodContribution": 20,
-      "price": 100,
-      "itemType": "Firewood",
+      "price": 50,
       "inStock": 20
     },
     {
@@ -17,100 +16,85 @@
       "combustionFactor": 0.7,
       "firewoodContribution": 50,
       "price": 200,
-      "itemType": "Firewood",
+      "inStock": 15
+    },
+    {
+      "id": 2,
+      "name": "splitLog",
+      "imageSrc": "split_log.png",
+      "combustionFactor": 1,
+      "firewoodContribution": 30,
+      "price": 120,
       "inStock": 15
     }
   ],
   "flammableItems": [
     {
-      "id": 2,
-      "name": "log",
-      "imageSrc": "log.jpg",
+      "id": 0,
+      "name": "thinner",
+      "imageSrc": "thinner.jpg",
+      "flameMultiplier": 20,
+      "flameMultiplierDuration": 60,
+      "price": 100,
+      "inStock": 2
+    }
+  ],
+  "firestarterItems": [
+    {
+      "id": 0,
+      "name": "matches",
+      "imageSrc": "matches.jpg",
       "flameIncrement": 20,
       "flameIncrementDuration": 60,
+      "firewoodContribution": 5,
+      "price": 100,
+      "inStock": 2
+    },
+    {
+      "id": 1,
+      "name": "molly",
+      "imageSrc": "molly.png",
+      "flameIncrement": 50,
+      "flameIncrementDuration": 360,
+      "firewoodContribution": 0,
       "price": 100,
       "inStock": 2
     }
   ],
   "users": [
     {
-      "id": 0,
-      "username": "ognjen",
+      "id": 1,
+      "balance": 400,
       "password": "1234",
+      "username": "ognjen",
       "gameInfo": null,
-      "balance": 200,
       "inventory": {
-        "flammableItems": [
+        "firestarterItems": [
           {
-            "item": 2,
-            "quantity": 5
+            "item": 0,
+            "quantity": 1
           }
         ],
         "firewoodItems": [
           {
+            "item": 2,
+            "quantity": 5
+          },
+          {
             "item": 0,
-            "quantity": 10
+            "quantity": 2
           },
           {
             "item": 1,
-            "quantity": 7
+            "quantity": 1
+          }
+        ],
+        "flammableItems": [
+          {
+            "item": 0,
+            "quantity": 1
           }
         ]
-      }
-    },
-    {
-      "username": "ognjen2",
-      "password": "1234",
-      "gameInfo": null,
-      "balance": 200,
-      "inventory": {
-        "firewoodItems": [],
-        "flammableItems": []
-      },
-      "id": 1
-    },
-    {
-      "username": "ognjen3",
-      "password": "1234",
-      "gameInfo": null,
-      "balance": 200,
-      "inventory": {
-        "firewoodItems": [],
-        "flammableItems": []
-      },
-      "id": 2
-    },
-    {
-      "id": 3,
-      "username": "ognjen4",
-      "password": "1234",
-      "gameInfo": null,
-      "balance": 200,
-      "inventory": {
-        "firewoodItems": [],
-        "flammableItems": []
-      }
-    },
-    {
-      "id": 4,
-      "username": "3211",
-      "password": "1",
-      "gameInfo": null,
-      "balance": 200,
-      "inventory": {
-        "firewoodItems": [],
-        "flammableItems": []
-      }
-    },
-    {
-      "id": 5,
-      "username": "ognjen123",
-      "password": "123",
-      "gameInfo": null,
-      "balance": 200,
-      "inventory": {
-        "firewoodItems": [],
-        "flammableItems": []
       }
     }
   ]

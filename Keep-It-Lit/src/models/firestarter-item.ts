@@ -1,8 +1,9 @@
-export interface FirewoodItem{
+export interface FirestarterItem{
     id:number;
     name:string;
     imageSrc:string;
-    combustionFactor:number;
+    flameIncrement:number;
+    flameIncrementDuration:number;
     firewoodContribution:number;
     price:number;
     inStock:number;    

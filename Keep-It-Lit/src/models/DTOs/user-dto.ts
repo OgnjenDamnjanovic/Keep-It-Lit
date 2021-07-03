@@ -2,10 +2,10 @@ import { INITIAL_BALANCE } from "../../misc/GameConfig";
 import { Inventory } from "../inventory";
 import { SavedGame } from "../savedGame";
 import { User } from "../user";
-import { InventoryDTO } from "./inventory-dto";
-
+import { InventoryDTO, InventoryToInventoryDTO } from "./inventory-dto";
+import { Guid } from "guid-typescript";
 export interface UserDTO {
-  id:number,
+  id:string,
   username: string;
   password: string;
   gameInfo: SavedGame;
@@ -25,14 +25,26 @@ export function userDTOtoUser(userDTO: UserDTO, inventory: Inventory): User {
 
 export function createInitialUserDTO(username:string,password:string):UserDTO{
   return {
-    id:0,
+    id:Guid.create().toString(),
     username:username,
     password:password,
     gameInfo:null,
     balance:INITIAL_BALANCE,
     inventory:{
       firewoodItems:[],
-      flammableItems:[]
+      flammableItems:[],
+      firestarterItems:[]
     }
+  }
+}
+export function userToUserDTO(user:User):UserDTO{
+
+  return {
+    id:user.id,
+    balance:user.balance,
+    password:user.password,
+    username:user.username,
+    gameInfo:user.gameInfo,
+    inventory:InventoryToInventoryDTO(user.inventory)
   }
 }

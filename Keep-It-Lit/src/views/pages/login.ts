@@ -1,5 +1,6 @@
 import { ErrorCodes } from "../../misc/ErrorCodes";
 import { Page } from "../../misc/Page";
+import { User } from "../../models/user";
 import { getUserObs } from "../../services/DB services/user.service";
 import {
   createButton,
@@ -22,14 +23,14 @@ export class Login {
       "loginHeadline",
       "ENTER YOUR CREDENTIALS:"
     );
-    const usernameInput:HTMLInputElement = createInput(
+    const usernameInput: HTMLInputElement = createInput(
       "text",
       this._container,
       "loginInput",
       true,
       "Username"
     );
-    const passwordInput:HTMLInputElement = createInput(
+    const passwordInput: HTMLInputElement = createInput(
       "password",
       this._container,
       "loginInput",
@@ -40,7 +41,7 @@ export class Login {
     this._container.onsubmit = () => {
       getUserObs(usernameInput.value, passwordInput.value).subscribe({
         //predlozeno u dokumentaciji za kad se handle greska
-        next: (v) => console.log(v),
+        next: (user:User) => Router.Navigator.goTo(Page.Game,user),
         error: (e) => {
           if (e.message === ErrorCodes.userNotFound.toString())
             alert("Wrong credentials");
@@ -49,7 +50,14 @@ export class Login {
 
       return false;
     };
-    const noAcc:HTMLAnchorElement=<HTMLAnchorElement>createElement('a',this._container,'dontHaveAcc','I don\'t have an acount');
-    noAcc.onclick=()=>Router.Navigator.goTo(Page.Register)
+    const noAcc: HTMLAnchorElement = <HTMLAnchorElement>(
+      createElement(
+        "a",
+        this._container,
+        "dontHaveAcc",
+        "I don't have an acount"
+      )
+    );
+    noAcc.onclick = () => Router.Navigator.goTo(Page.Register);
   }
 }
