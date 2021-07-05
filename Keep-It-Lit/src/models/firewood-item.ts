@@ -4,6 +4,5 @@ export interface FirewoodItem{
     imageSrc:string;
     combustionFactor:number;
     firewoodContribution:number;
-    price:number;
-    inStock:number;    
+    price:number; 
 }

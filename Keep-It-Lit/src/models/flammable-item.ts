@@ -4,6 +4,5 @@ export interface FlammableItem{
     imageSrc:string;
     flameMultiplier:number;
     flameMultiplierDuration:number;
-    price:number;
-    inStock:number;    
+    price:number;   
 }

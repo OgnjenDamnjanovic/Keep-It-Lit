@@ -1,23 +1,21 @@
+import { BehaviorSubject, fromEvent, Observable, zip } from "rxjs";
 import {
-  BehaviorSubject,
-  forkJoin,
-  fromEvent,
-  observable,
-  Observable,
-  zip,
-} from "rxjs";
-import {
+  distinctUntilChanged,
+  distinctUntilKeyChanged,
   filter,
   map,
   share,
-  skipUntil,
   switchMap,
+  take,
+  tap,
   withLatestFrom,
 } from "rxjs/operators";
 import { GAME_IMAGES_LOCATION } from "../../misc/AssetsURL";
 import { FirestarterItem } from "../../models/firestarter-item";
 import { FirewoodItem } from "../../models/firewood-item";
 import { FlammableItem } from "../../models/flammable-item";
+import { createEmptyInventory, Inventory } from "../../models/inventory";
+import { Store } from "../../models/store";
 import {
   buyFirestarterItem,
   buyFirewoodItem,
@@ -26,7 +24,11 @@ import {
 } from "../../models/user";
 import { getAllStoreItems } from "../../services/DB services/store.service";
 import { updateUserObs } from "../../services/DB services/user.service";
-import { createElement, createImage } from "../../services/DOM.service";
+import {
+  createButton,
+  createElement,
+  createImage,
+} from "../../services/DOM.service";
 
 export class StoreView {
   private userSubject: BehaviorSubject<User>;
@@ -36,28 +38,86 @@ export class StoreView {
       createElement("div", mainContainer, "storeContainer", "")
     );
     this.userSubject = userSubject;
+    this.userSubject
+      .pipe(distinctUntilKeyChanged("balance"))
+      .subscribe((user) => {
+        this.disableExpensiveItems(user.balance);
+        this.renderBalance(user.balance);
+      });
   }
 
   renderContent() {
-    getAllStoreItems().subscribe((store) => {
-      store.firewoodItems.map((fwItem) =>
-        this.drawStoreItem(fwItem, buyFirewoodItem)
-      );
-      store.flammableItems.map((fmItem) =>
-        this.drawStoreItem(fmItem, buyFlammableItem)
-      );
-      store.firestarterItems.map((fsItem) =>
-        this.drawStoreItem(fsItem, buyFirestarterItem)
-      );
-    });
+    const leftArrow =
+      "<i class='fas fa-caret-left'></i><div>S<br/>T<br/>O<br/>R<br/>E</div>";
+    const rightArrow =
+      "<i class='fas fa-caret-right'></i><div>S<br/>T<br/>O<br/>R<br/>E</div>";
+    createElement("div", this._container, "storeSpacer", "");
+    const showStoreBtn: HTMLButtonElement = createButton(
+      this._container,
+      "storeShowBtn",
+      leftArrow,
+      () => {
+        if (window.getComputedStyle(itemsContainer).display === "none") {
+          showStoreBtn.innerHTML = rightArrow;
+          itemsContainer.style.display = "flex";
+          balanceLabel.classList.add("balanceLabelOffset");
+          showStoreBtn.classList.add("storeShowBtnOffset");
+        } else {
+          showStoreBtn.innerHTML = leftArrow;
+          itemsContainer.style.display = "none";
+          balanceLabel.classList.remove("balanceLabelOffset");
+          showStoreBtn.classList.remove("storeShowBtnOffset");
+        }
+      }
+    );
+
+    const itemsContainer = <HTMLDivElement>(
+      createElement("div", this._container, "storeItemsCont", "")
+    );
+    const balanceLabel = createElement(
+      "label",
+      this._container,
+      "balanceLabel",
+      ""
+    );
+    getAllStoreItems()
+      .pipe(withLatestFrom(this.userSubject.pipe(map((user) => user.balance))))
+      .subscribe((str: [Store, number]) => {
+        str[0].firewoodItems.map((fwItem) =>
+          this.renderStoreItem(fwItem, buyFirewoodItem, itemsContainer)
+        );
+        str[0].flammableItems.map((fmItem) =>
+          this.renderStoreItem(fmItem, buyFlammableItem, itemsContainer)
+        );
+        str[0].firestarterItems.map((fsItem) =>
+          this.renderStoreItem(fsItem, buyFirestarterItem, itemsContainer)
+        );
+        this.disableExpensiveItems(str[1]);
+        this.renderBalance(str[1]);
+      });
   }
-  drawStoreItem(
+  disableExpensiveItems(balance: number) {
+    this._container
+      .querySelectorAll(".storeItemPrice")
+      .forEach((itemPriceDiv: HTMLDivElement) => {
+        itemPriceDiv.parentElement.classList.remove("disabledDiv");
+        if (parseInt(itemPriceDiv.getAttribute("price")) > balance)
+          itemPriceDiv.parentElement.classList.add("disabledDiv");
+      });
+  }
+  renderBalance(balance: number) {
+    const balanceLabel = document.querySelector(".balanceLabel");
+    if (balanceLabel)
+      balanceLabel.innerHTML = `${balance.toString()}   <i class='fa fa-coins'></i>`;
+  }
+  renderStoreItem(
     item: FirewoodItem | FlammableItem | FirestarterItem,
-    buyItemCallback: Function
+    buyItemCallback: Function,
+    parent: HTMLDivElement
   ) {
     const itemContainer = createElement(
-      "span",
-      this._container,
+      "div",
+      parent,
       "storeItemContainer",
       ""
     );
@@ -65,15 +125,15 @@ export class StoreView {
       itemContainer,
       "storeitemImage",
       GAME_IMAGES_LOCATION + item.imageSrc,
-      85,
-      85
+      95,
+      80
     );
     createElement(
-      "span",
+      "div",
       itemContainer,
       "storeItemPrice",
       `<label>${item.price}</label> <i class='fa fa-coins'></i>`
-    );
+    ).setAttribute("price", item.price.toString());
     const newUserStateObs: Observable<User> = fromEvent(
       itemContainer,
       "click"

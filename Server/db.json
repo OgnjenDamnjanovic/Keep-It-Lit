@@ -33,8 +33,17 @@
       "id": 0,
       "name": "thinner",
       "imageSrc": "thinner.jpg",
-      "flameMultiplier": 20,
+      "flameMultiplier": 2,
       "flameMultiplierDuration": 60,
+      "price": 100,
+      "inStock": 2
+    },
+    {
+      "id": 1,
+      "name": "waterglass",
+      "imageSrc": "waterglass.jpg",
+      "flameMultiplier": 0.6,
+      "flameMultiplierDuration": 80,
       "price": 100,
       "inStock": 2
     }
@@ -47,6 +56,7 @@
       "flameIncrement": 20,
       "flameIncrementDuration": 60,
       "firewoodContribution": 5,
+      "combustionFactor": 3,
       "price": 100,
       "inStock": 2
     },
@@ -57,6 +67,18 @@
       "flameIncrement": 50,
       "flameIncrementDuration": 360,
       "firewoodContribution": 0,
+      "combustionFactor": 0,
+      "price": 100,
+      "inStock": 2
+    },
+    {
+      "id": 2,
+      "name": "firetorch",
+      "imageSrc": "firetorch.png",
+      "flameIncrement": 40,
+      "flameIncrementDuration": 420,
+      "firewoodContribution": 45,
+      "combustionFactor": 1,
       "price": 100,
       "inStock": 2
     }
@@ -64,35 +86,50 @@
   "users": [
     {
       "id": 1,
-      "balance": 400,
+      "balance": 5503840,
       "password": "1234",
       "username": "ognjen",
-      "gameInfo": null,
+      "gameInfo": {
+        "emberAmount": 0,
+        "flameBaseLevel": 0,
+        "fireboosters": [],
+        "totalFlameMultiplier": 1,
+        "totalFlameIncrement": 0,
+        "firewood": {}
+      },
       "inventory": {
         "firestarterItems": [
-          {
-            "item": 0,
-            "quantity": 1
-          }
-        ],
-        "firewoodItems": [
           {
             "item": 2,
             "quantity": 5
           },
           {
+            "item": 1,
+            "quantity": 3
+          },
+          {
             "item": 0,
-            "quantity": 2
+            "quantity": 8
+          }
+        ],
+        "firewoodItems": [
+          {
+            "item": 0,
+            "quantity": 20
+          },
+          {
+            "item": 2,
+            "quantity": 6
           },
           {
             "item": 1,
-            "quantity": 1
+            "quantity": 23
           }
         ],
         "flammableItems": [
           {
             "item": 0,
-            "quantity": 1
+            "quantity": 4
           }
         ]
       }

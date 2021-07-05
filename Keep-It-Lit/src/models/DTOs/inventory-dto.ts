@@ -1,14 +1,12 @@
-import { from, Observable, zip } from "rxjs";
+import { from, zip } from "rxjs";
 import { concatMap, filter, map, toArray } from "rxjs/operators";
+import { getDictElements } from "../../misc/Dictionary";
 import {
   getFirestarterItemByID,
   getFirewoodItemByID,
   getFlammableItemByID,
 } from "../../services/DB services/store.service";
-import { FirestarterItem } from "../firestarter-item";
-import { FirewoodItem } from "../firewood-item";
-import { FlammableItem } from "../flammable-item";
-import { Inventory } from "../inventory";
+import { createInventory, Inventory } from "../inventory";
 import { InventoryItem } from "../inventory-item";
 
 export interface InventoryDTO {
@@ -25,13 +23,10 @@ export function inventoryDTOtoInventoryObs(inventoryDTO: InventoryDTO) {
           getFirewoodItemByID(firewoodItemDTO.item)
         ),
         filter((item) => Object.keys(item).length > 0),
-        map(
-          (item, index) =>
-            new InventoryItem<FirewoodItem>(
-              item,
-              inventoryDTO.firewoodItems[index].quantity
-            )
-        )
+        map((item, index) => ({
+          item: item,
+          quantity: inventoryDTO.firewoodItems[index].quantity,
+        }))
       )
       .pipe(toArray()),
     from(inventoryDTO.flammableItems)
@@ -40,13 +35,10 @@ export function inventoryDTOtoInventoryObs(inventoryDTO: InventoryDTO) {
           getFlammableItemByID(flammableItemDTO.item)
         ),
         filter((item) => Object.keys(item).length > 0),
-        map(
-          (item, index) =>
-            new InventoryItem<FlammableItem>(
-              item,
-              inventoryDTO.flammableItems[index].quantity
-            )
-        )
+        map((item, index) => ({
+          item: item,
+          quantity: inventoryDTO.flammableItems[index].quantity,
+        }))
       )
       .pipe(toArray()),
     from(inventoryDTO.firestarterItems)
@@ -55,39 +47,27 @@ export function inventoryDTOtoInventoryObs(inventoryDTO: InventoryDTO) {
           getFirestarterItemByID(firestarterItemDTO.item)
         ),
         filter((item) => Object.keys(item).length > 0),
-        map(
-          (item, index) =>
-            new InventoryItem<FirestarterItem>(
-              item,
-              inventoryDTO.firestarterItems[index].quantity
-            )
-        )
+        map((item, index) => ({
+          item: item,
+          quantity: inventoryDTO.firestarterItems[index].quantity,
+        }))
       )
       .pipe(toArray())
-  ).pipe(map((items) => new Inventory(items[1], items[0], items[2])));
+  ).pipe(map((items) => createInventory(items[1], items[0], items[2])));
 }
 export function InventoryToInventoryDTO(inv: Inventory): InventoryDTO {
   return {
-    firestarterItems: Object.getOwnPropertyNames(inv.firestarterItems).map(
-      (prop) =>
-        new InventoryItem<number>(
-          inv.firestarterItems[prop].item.id,
-          inv.firestarterItems[prop].quantity
-        )
-    ),
-    firewoodItems: Object.getOwnPropertyNames(inv.firewoodItems).map(
-      (prop) =>
-        new InventoryItem<number>(
-          inv.firewoodItems[prop].item.id,
-          inv.firewoodItems[prop].quantity
-        )
-    ),
-    flammableItems: Object.getOwnPropertyNames(inv.flammableItems).map(
-      (prop) =>
-        new InventoryItem<number>(
-          inv.flammableItems[prop].item.id,
-          inv.flammableItems[prop].quantity
-        )
-    ),
+    firestarterItems: getDictElements(inv.firestarterItems).map((prop) => ({
+      item: inv.firestarterItems[prop].item.id,
+      quantity: inv.firestarterItems[prop].quantity,
+    })),
+    firewoodItems: getDictElements(inv.firewoodItems).map((prop) => ({
+      item: inv.firewoodItems[prop].item.id,
+      quantity: inv.firewoodItems[prop].quantity,
+    })),
+    flammableItems: getDictElements(inv.flammableItems).map((prop) => ({
+      item: inv.flammableItems[prop].item.id,
+      quantity: inv.flammableItems[prop].quantity,
+    })),
   };
 }

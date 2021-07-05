@@ -1,8 +1,5 @@
-export class InventoryItem<T>{
+export interface InventoryItem<T>{
     item: T;
     quantity:number;
-    constructor(item:T, quantity:number){
-        this.item=item;
-        this.quantity=quantity
-    }
+    
 }

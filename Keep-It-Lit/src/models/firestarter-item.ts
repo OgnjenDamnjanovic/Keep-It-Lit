@@ -5,6 +5,6 @@ export interface FirestarterItem{
     flameIncrement:number;
     flameIncrementDuration:number;
     firewoodContribution:number;
-    price:number;
-    inStock:number;    
+    combustionFactor:number,
+    price:number;  
 }

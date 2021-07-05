@@ -1,54 +1,140 @@
-.registerError, .passwordError{
+.inventoryContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: fit-content;
+}
+.fa-caret-left,
+.fa-caret-right {
+  margin-top: 30px;
+}
+.disabledDiv{
+  pointer-events: none;
+   opacity: 0.4;
+}
+.balanceLabel{
+  align-self: flex-end;
+  font-size: xx-large;
+  position: relative;
+  
+  
+  white-space: nowrap;
+}
+.balanceLabelOffset{
+  left: -105px;
+}
+.ivnItemQuantity{
+  margin-top: 28%;
+  margin-left: 5px;
+  color: rgb(129, 67, 9);;
+}
+.storeShowBtn {
+  height: fit-content;
+  background-color: rgb(255, 197, 73);
+  border: 2px solid rgb(196, 95, 0);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  padding: 8px;
+  padding-left: 5px;
+  margin-right: 10px;
+  position: relative;
+  left: 120px;
+}
+.storeShowBtnOffset{
+  left: 0px;
+}
+.storeShowBtn > div {
+  margin-left: 5px;
+}
+.storeSpacer {
+  width: 100%;
+  display: block;
+  height: 100px;
+}
+.storeContainer {
+  display: flex;
+  flex-direction: row;
+  width: 300px;
+  height: 700px;
+  
+}
+
+.invItemImg{
+  border: 2px solid rgb(255, 170, 12);
+  border-radius: 20px;
+  cursor: pointer;
+}
+.gameContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 11px;
+  padding-right: 0px;
+}
+.invItemContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+  
+}
+.inventoryContainer>h2{
+  margin-top: 0px;
+  margin-bottom: 4px;
+  text-decoration: underline;
+  color: rgb(136, 78, 6);
+}
+
+.registerError,
+.passwordError {
   align-self: center;
   font-size: 10px;
 }
-.storeContainer{
-  max-width: 205px;
+.storeItemsCont {
+  height: fit-content;
+  min-width: 225px;
   width: fit-content;
-  display: flex;
+  display: none;
   flex-direction: row;
-  border: 2px dotted rgb(255, 150, 12);
+  border: 4px dotted rgb(255, 219, 12);
   padding: 10px;
   flex-wrap: wrap;
-   
 }
-.storeContainer>span{
+.storeItemsCont > div {
   width: fit-content;
   cursor: pointer;
   border: 1px solid rgb(255, 116, 74);
-  margin:3px;
+  margin: 3px;
   border-radius: 5px;
   padding: 3px;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  
-  
 }
-.storeContainer>span label{
-  margin-left: 20px;
+.storeItemsCont > div label {
+  margin-left: 25px;
 }
 
-.storeitemImage{
+.storeitemImage {
   margin-left: 2px;
   border-bottom: 1px dotted rgb(122, 122, 122);
   margin-bottom: 3px;
 }
-.storeItemPrice{
+.storeItemPrice {
   margin-bottom: 3px;
- 
-  
 }
-.fa-coins{
-  color:rgba(255, 217, 0, 0.856);
+.fa-coins {
+  color: rgba(255, 217, 0, 0.856);
 }
-.errorHidden{
+.errorHidden {
   visibility: hidden;
 }
-.errorVisible{
+.errorVisible {
   visibility: visible;
 }
-.backArrow{
+.backArrow {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -56,17 +142,16 @@
   color: #ccc6c6;
   cursor: pointer;
 }
-.dontHaveAcc{
+.dontHaveAcc {
   align-self: center;
   text-decoration: underline;
   color: rgb(85, 85, 248);
   cursor: pointer;
-  margin-top:10px;
+  margin-top: 10px;
 }
 
-
-
-.loginForm,.registerForm{
+.loginForm,
+.registerForm {
   display: flex;
   flex-direction: column;
   background-color: rgb(255, 185, 88);
@@ -77,11 +162,11 @@
   margin-left: 30%;
   margin-right: 30%;
   margin-top: 200px;
-  border-radius: 10px; 
-
+  border-radius: 10px;
 }
 
-.loginInput,.registerInput{
+.loginInput,
+.registerInput {
   font-size: 17px;
   width: 30%;
   align-self: center;
@@ -91,15 +176,16 @@
   border-style: solid;
   margin: 7px;
 }
-.registerInput:nth-child(3){
-  margin:0px;
+.registerInput:nth-child(3) {
+  margin: 0px;
 }
-.loginForm>h2, .registerForm>h2{
+.loginForm > h2,
+.registerForm > h2 {
   margin-bottom: 30px;
   align-self: center;
 }
-.loginSubmitBtn,.registerSubmitBtn{
-  
+.loginSubmitBtn,
+.registerSubmitBtn {
   height: 28px;
   width: 13%;
   align-self: center;
@@ -107,10 +193,8 @@
   border-radius: 8px;
   cursor: pointer;
   margin-top: 20px;
-  border:3px solid rgb(158, 49, 49)
+  border: 3px solid rgb(158, 49, 49);
 }
-
-
 
 .gameDescription {
   text-align: center;

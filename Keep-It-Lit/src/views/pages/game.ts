@@ -1,10 +1,12 @@
 import { DisposableView } from "../page-interfaces/DisposableView";
-import { createElement } from "../../services/DOM.service";
+import { createElement, createImage } from "../../services/DOM.service";
 import { ParametrizedView } from "../page-interfaces/ParametrizedView";
 import { isUser, User } from "../../models/user";
 import { BehaviorSubject } from "rxjs";
 import { StoreView } from "../components/store-view";
-import { userToUserDTO } from "../../models/DTOs/user-dto";
+import { InventoryView } from "../components/inventory-view";
+import { IMAGES_LOCATION } from "../../misc/AssetsURL";
+import { FireplaceView } from "../components/fireplace-view";
 
 export class Game implements DisposableView {
   private _container: HTMLFormElement;
@@ -14,12 +16,15 @@ export class Game implements DisposableView {
       createElement("div", mainContainer, "gameContainer", "")
     );
     this.userSubject = new BehaviorSubject<User>(parameter);
-    this.userSubject.subscribe((user) => console.log(user));
 
   }
 
   renderContent() {
+    createImage(this._container,'fullMark',IMAGES_LOCATION+"fullMark.jpg",1400,900)
+    new InventoryView(this._container,this.userSubject).renderContent();
     new StoreView(this._container, this.userSubject).renderContent();
+    new FireplaceView(this._container,this.userSubject).renderContent();
+    
     
   }
   dispose() {}
