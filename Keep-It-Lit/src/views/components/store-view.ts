@@ -1,12 +1,10 @@
 import { BehaviorSubject, fromEvent, Observable, zip } from "rxjs";
 import {
-  distinctUntilChanged,
   distinctUntilKeyChanged,
   filter,
   map,
   share,
   switchMap,
-  take,
   tap,
   withLatestFrom,
 } from "rxjs/operators";
@@ -14,7 +12,6 @@ import { GAME_IMAGES_LOCATION } from "../../misc/AssetsURL";
 import { FirestarterItem } from "../../models/firestarter-item";
 import { FirewoodItem } from "../../models/firewood-item";
 import { FlammableItem } from "../../models/flammable-item";
-import { createEmptyInventory, Inventory } from "../../models/inventory";
 import { Store } from "../../models/store";
 import {
   buyFirestarterItem,
@@ -134,21 +131,14 @@ export class StoreView {
       "storeItemPrice",
       `<label>${item.price}</label> <i class='fa fa-coins'></i>`
     ).setAttribute("price", item.price.toString());
-    const newUserStateObs: Observable<User> = fromEvent(
+   fromEvent(
       itemContainer,
       "click"
     ).pipe(
       withLatestFrom(this.userSubject),
       filter((evUser) => item.price <= evUser[1].balance),
       map((evAndUser) => buyItemCallback(evAndUser[1], item)),
-      share()
-    );
-
-    zip(
-      newUserStateObs.pipe(switchMap((user) => updateUserObs(user))),
-      newUserStateObs
-    )
-      .pipe(map((x) => x[1]))
-      .subscribe(this.userSubject);
+      tap(user=>updateUserObs(user))
+    ).subscribe(this.userSubject);
   }
 }

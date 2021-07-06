@@ -1,6 +1,7 @@
-import { BehaviorSubject } from "rxjs";
-import { map } from "rxjs/operators";
+import { BehaviorSubject, Subscription, timer } from "rxjs";
+import { map, tap, withLatestFrom } from "rxjs/operators";
 import { getDictElements } from "../misc/Dictionary";
+import { updateUserObs } from "../services/DB services/user.service";
 import { FireBooster } from "./firebooster";
 import { evaluateFireLevel, Fireplace } from "./fireplace";
 import { FirestarterItem } from "./firestarter-item";
@@ -89,6 +90,16 @@ export function buyFirewoodItem(user: User, item: FirewoodItem): User {
 
   return newUser;
 }
+export function startFireBoosterTimer(firebooster:FireBooster,userSubject:BehaviorSubject<User>){
+  const subscription: Subscription = timer(0, 1000)
+  .pipe(
+    withLatestFrom(userSubject),
+    map((x) =>
+      clockFireBooster(x[1], firebooster, subscription, userSubject)
+    )
+  )
+  .subscribe(userSubject);
+}
 export function insertFlammableItem(
   user: User,
   item: FlammableItem,
@@ -102,32 +113,21 @@ export function insertFlammableItem(
   if (evaluateFireLevel(newUser.gameInfo) != 0) {
     newUser.gameInfo.totalFlameMultiplier *= item.flameMultiplier;
 
-    // const firebooster =
-    //   user.gameInfo.fireboosters[
-    //     user.gameInfo.fireboosters.push({
-    //       timeLeft: item.flameMultiplierDuration,
-    //       flameIncrement: 0,
-    //       flameMultiplier: item.flameMultiplier,
-    //     }) - 1
-    //   ];
+    const firebooster =
+      newUser.gameInfo.fireboosters[
+        newUser.gameInfo.fireboosters.push({
+          timeLeft: item.flameMultiplierDuration,
+          flameIncrement: 0,
+          flameMultiplier: item.flameMultiplier,
+        }) - 1
+      ];
 
-    // const fireBoosterFullTime = firebooster.timeLeft;
-    // setTimeout(() => {
-    //   clearInterval(intervalID);
-    //   userSubject
-    //     .pipe(map((user) => removeFireBooster(user, firebooster)))
-    //     .subscribe(userSubject);
-    // }, fireBoosterFullTime * 1000 + 1);
-
-    // const intervalID = setInterval(() => {
-    //   userSubject
-    //     .pipe(map((user) => clockFireBooster(user, firebooster)))
-    //     .subscribe(userSubject);
-    // }, 1000);
+      startFireBoosterTimer(firebooster,userSubject);
   }
 
   return newUser;
 }
+
 export function insertFirestarterItem(
   user: User,
   item: FirestarterItem,
@@ -150,28 +150,16 @@ export function insertFirestarterItem(
       item.firewoodContribution;
   }
 
-  // const firebooster =
-  //   user.gameInfo.fireboosters[
-  //     user.gameInfo.fireboosters.push({
-  //       timeLeft: item.flameIncrementDuration,
-  //       flameIncrement: item.flameIncrement,
-  //       flameMultiplier: 1,
-  //     }) - 1
-  //   ];
+  const firebooster =
+    user.gameInfo.fireboosters[
+      user.gameInfo.fireboosters.push({
+        timeLeft: item.flameIncrementDuration,
+        flameIncrement: item.flameIncrement,
+        flameMultiplier: 1,
+      }) - 1
+    ];
 
-  // const fireBoosterFullTime = firebooster.timeLeft;
-  // setTimeout(() => {
-  //   clearInterval(intervalID);
-  //   userSubject
-  //     .pipe(map((user) => removeFireBooster(user, firebooster))) //radi isto kao gore!!!!
-  //     .subscribe(userSubject);
-  // }, fireBoosterFullTime * 1000 + 1);
-
-  // const intervalID = setInterval(() => {
-  //   userSubject
-  //     .pipe(map((user) => clockFireBooster(user, firebooster)))
-  //     .subscribe(userSubject);
-  // }, 1000);
+    startFireBoosterTimer(firebooster,userSubject)
 
   return newUser;
 }
@@ -193,10 +181,18 @@ export function insertFirewoodItem(user: User, item: FirewoodItem): User {
   return newUser;
 }
 
-
-
-export function clockFireBooster(user: User, firebooster: FireBooster): User {
+export function clockFireBooster(
+  user: User,
+  firebooster: FireBooster,
+  sub: Subscription,
+  userSubject: BehaviorSubject<User>
+): User {
   firebooster.timeLeft--;
+  if (firebooster.timeLeft == 0) {
+    sub.unsubscribe();
+    userSubject.next(removeFireBooster(user, firebooster));
+    updateUserObs(user);
+  }
   return user;
 }
 export function removeFireBooster(user: User, firebooster: FireBooster): User {
@@ -205,7 +201,6 @@ export function removeFireBooster(user: User, firebooster: FireBooster): User {
   );
   user.gameInfo.totalFlameIncrement -= firebooster.flameIncrement;
   user.gameInfo.totalFlameMultiplier /= firebooster.flameMultiplier;
-  user.gameInfo.flameBaseLevel = evaluateFireLevel(user.gameInfo);
   return user;
 }
 

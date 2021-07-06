@@ -1,5 +1,5 @@
-import { combineLatest, forkJoin, from, Observable, of, zip } from "rxjs";
-import { map, share, switchMap, withLatestFrom } from "rxjs/operators";
+import {  from, Observable, zip } from "rxjs";
+import { map, share, switchMap } from "rxjs/operators";
 import { USERS_URL } from "../../misc/API URLs";
 import { ErrorCodes } from "../../misc/ErrorCodes";
 import { inventoryDTOtoInventoryObs } from "../../models/DTOs/inventory-dto";
@@ -73,7 +73,7 @@ export function updateUserObs(user: User): Observable<Response> {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => {
+    }).then((response) => { 
       if (!response.ok) throw Error(ErrorCodes.userNotFound.toString());
       return response;
     })

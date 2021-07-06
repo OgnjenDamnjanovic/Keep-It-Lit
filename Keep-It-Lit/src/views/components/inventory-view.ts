@@ -5,6 +5,7 @@ import {
   map,
   share,
   switchMap,
+  tap,
   withLatestFrom,
 } from "rxjs/operators";
 import { GAME_IMAGES_LOCATION } from "../../misc/AssetsURL";
@@ -35,31 +36,29 @@ export class InventoryView {
 
   renderContent() {
     this.userSubject
-      .pipe(
-        distinctUntilKeyChanged('inventory',areSameInventories)
-      )
+      .pipe(distinctUntilKeyChanged("inventory", areSameInventories))
       .subscribe((User) => this.renderInventory(User.inventory));
   }
   renderInventory(inventory: Inventory) {
     this._container.innerHTML = "";
-    if(getDictElements(inventory.firewoodItems).length!==0)
-    createElement("h2", this._container, "", "Firewoods:");
+    if (getDictElements(inventory.firewoodItems).length !== 0)
+      createElement("h2", this._container, "", "Firewoods:");
     getDictElements(inventory.firewoodItems).map((itemName) =>
       this.renderInventoryItem(
         inventory.firewoodItems[itemName],
         insertFirewoodItem
       )
     );
-    if(getDictElements(inventory.flammableItems).length!==0)
-    createElement("h2", this._container, "", "Flammables:");
+    if (getDictElements(inventory.flammableItems).length !== 0)
+      createElement("h2", this._container, "", "Flammables:");
     getDictElements(inventory.flammableItems).map((itemName) =>
       this.renderInventoryItem(
         inventory.flammableItems[itemName],
         insertFlammableItem
       )
     );
-    if(getDictElements(inventory.firestarterItems).length!==0)
-    createElement("h2", this._container, "", "Firestarters:");
+    if (getDictElements(inventory.firestarterItems).length !== 0)
+      createElement("h2", this._container, "", "Firestarters:");
     getDictElements(inventory.firestarterItems).map((itemName) =>
       this.renderInventoryItem(
         inventory.firestarterItems[itemName],
@@ -69,7 +68,11 @@ export class InventoryView {
   }
   renderInventoryItem(
     item: InventoryItem<FirewoodItem | FirestarterItem | FlammableItem>,
-    insertCallback: Function
+    insertCallback: (
+      user: User,
+      item: FirewoodItem | FirestarterItem | FlammableItem,
+      userSubject: BehaviorSubject<User>
+    ) => User
   ) {
     const itemContainer = createElement(
       "span",
@@ -91,18 +94,14 @@ export class InventoryView {
       `x${item.quantity}`
     );
 
-    const insertItemObs: Observable<User> = fromEvent(itemImage, "click").pipe(
-      withLatestFrom(this.userSubject),
-      map((evAndUser) =>
-        insertCallback(evAndUser[1], item.item, this.userSubject)
-      ),
-      share()
-    );
-    zip(
-      insertItemObs,
-      insertItemObs.pipe(switchMap((user) => updateUserObs(user)))
-    )
-      .pipe(map((x) => x[0]))
+    fromEvent(itemImage, "click")
+      .pipe(
+        withLatestFrom(this.userSubject),
+        map((evAndUser) =>
+          insertCallback(evAndUser[1], item.item, this.userSubject)
+        ),
+        tap((user) => updateUserObs(user)) //da subscribe ne ceka upis, pa da vrati user-a koji je u medjuvremenu izmenjen zbog timera
+      )
       .subscribe(this.userSubject);
   }
 }
