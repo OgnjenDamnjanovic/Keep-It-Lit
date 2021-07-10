@@ -86,35 +86,27 @@
   "users": [
     {
       "id": 1,
-      "balance": 5492660,
+      "balance": 5482220,
       "password": "1234",
       "username": "ognjen",
       "gameInfo": {
         "emberAmount": 0,
         "flameBaseLevel": 0,
-        "fireboosters": [],
-        "totalFlameMultiplier": 32,
-        "totalFlameIncrement": 170,
+        "fireboosters": {},
+        "totalFlameMultiplier": 1,
+        "totalFlameIncrement": 0,
         "firewood": {
-          "firetorch": {
-            "combustionFactor": 1,
-            "totalFirewoodContribution": 450
-          },
-          "branches": {
-            "combustionFactor": 1.2,
-            "totalFirewoodContribution": 80
-          },
           "splitLog": {
             "combustionFactor": 1,
             "totalFirewoodContribution": 60
           },
-          "log": {
-            "combustionFactor": 0.7,
-            "totalFirewoodContribution": 500
-          },
-          "matches": {
-            "combustionFactor": 3,
+          "branches": {
+            "combustionFactor": 1.2,
             "totalFirewoodContribution": 40
+          },
+          "firetorch": {
+            "combustionFactor": 1,
+            "totalFirewoodContribution": 135
           }
         }
       },
@@ -122,35 +114,39 @@
         "firestarterItems": [
           {
             "item": 1,
-            "quantity": 2
+            "quantity": 10
           },
+          {
+            "item": 0,
+            "quantity": 19
+          },
+          {
+            "item": 2,
+            "quantity": 13
+          }
+        ],
+        "firewoodItems": [
+          {
+            "item": 2,
+            "quantity": 14
+          },
+          {
+            "item": 1,
+            "quantity": 24
+          },
+          {
+            "item": 0,
+            "quantity": 18
+          }
+        ],
+        "flammableItems": [
           {
             "item": 0,
             "quantity": 10
           },
           {
-            "item": 2,
-            "quantity": 6
-          }
-        ],
-        "firewoodItems": [
-          {
-            "item": 0,
-            "quantity": 18
-          },
-          {
-            "item": 2,
-            "quantity": 8
-          },
-          {
             "item": 1,
-            "quantity": 17
-          }
-        ],
-        "flammableItems": [
-          {
-            "item": 1,
-            "quantity": 2
+            "quantity": 14
           }
         ]
       }

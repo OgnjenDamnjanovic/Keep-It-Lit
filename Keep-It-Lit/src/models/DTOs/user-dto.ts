@@ -34,7 +34,7 @@ export function createInitialUserDTO(
     gameInfo: {
       emberAmount: 0,
       flameBaseLevel: 0,
-      fireboosters: [],
+      fireboosters: {},
       totalFlameMultiplier: 1,
       totalFlameIncrement: 0,
       firewood: {},

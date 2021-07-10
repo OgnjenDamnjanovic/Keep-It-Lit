@@ -1,5 +1,6 @@
+import { nanoid } from "nanoid";
 import { BehaviorSubject, Subscription, timer } from "rxjs";
-import { map, tap, withLatestFrom } from "rxjs/operators";
+import { map, withLatestFrom } from "rxjs/operators";
 import { getDictElements } from "../misc/Dictionary";
 import { updateUserObs } from "../services/DB services/user.service";
 import { FireBooster } from "./firebooster";
@@ -25,6 +26,11 @@ export function cloneUserDepth2(user: User): User {
       flammableItems: { ...user.inventory.flammableItems },
       firewoodItems: { ...user.inventory.firewoodItems },
       firestarterItems: { ...user.inventory.firestarterItems },
+    },
+    gameInfo: {
+      ...user.gameInfo,
+      firewood: { ...user.gameInfo.firewood },
+      fireboosters: { ...user.gameInfo.fireboosters },
     },
   };
 }
@@ -90,15 +96,16 @@ export function buyFirewoodItem(user: User, item: FirewoodItem): User {
 
   return newUser;
 }
-export function startFireBoosterTimer(firebooster:FireBooster,userSubject:BehaviorSubject<User>){
+export function startFireBoosterTimer(
+  fireboosterKey: string,
+  userSubject: BehaviorSubject<User>
+) {
   const subscription: Subscription = timer(0, 1000)
-  .pipe(
-    withLatestFrom(userSubject),
-    map((x) =>
-      clockFireBooster(x[1], firebooster, subscription, userSubject)
+    .pipe(
+      withLatestFrom(userSubject),
+      map((x) => clockFireBooster(x[1], fireboosterKey, subscription, userSubject))
     )
-  )
-  .subscribe(userSubject);
+    .subscribe(userSubject);
 }
 export function insertFlammableItem(
   user: User,
@@ -113,28 +120,30 @@ export function insertFlammableItem(
   if (evaluateFireLevel(newUser.gameInfo) != 0) {
     newUser.gameInfo.totalFlameMultiplier *= item.flameMultiplier;
 
-    const firebooster =
-      newUser.gameInfo.fireboosters[
-        newUser.gameInfo.fireboosters.push({
-          timeLeft: item.flameMultiplierDuration,
-          flameIncrement: 0,
-          flameMultiplier: item.flameMultiplier,
-        }) - 1
-      ];
+    const fireboosterKey =  nanoid(6);
+    newUser.gameInfo.fireboosters[fireboosterKey]={
+      timeLeft: item.flameMultiplierDuration,
+      flameIncrement: 0,
+      flameMultiplier: item.flameMultiplier,
+    }
+      
 
-      startFireBoosterTimer(firebooster,userSubject);
+    startFireBoosterTimer(fireboosterKey, userSubject);
   }
 
   return newUser;
 }
-
 export function insertFirestarterItem(
   user: User,
   item: FirestarterItem,
   userSubject: BehaviorSubject<User>
 ): User {
   if (!user.inventory.firestarterItems[item.name]) return user;
-  const newUser: User = cloneFirestarterItems(user, cloneUserDepth2(user));
+  const newUser: User = cloneFirewoodComponents(
+    user,
+    cloneFirestarterItems(user, cloneUserDepth2(user))
+  );
+
   newUser.inventory.firestarterItems[item.name].quantity--;
   if (newUser.inventory.firestarterItems[item.name].quantity === 0)
     delete newUser.inventory.firestarterItems[item.name];
@@ -149,23 +158,24 @@ export function insertFirestarterItem(
     newUser.gameInfo.firewood[item.name].totalFirewoodContribution +=
       item.firewoodContribution;
   }
+  const fireboosterKey =  nanoid(6);
+  newUser.gameInfo.fireboosters[fireboosterKey]={
+    timeLeft: item.flameIncrementDuration,
+    flameIncrement: item.flameIncrement,
+    flameMultiplier: 1,
+  }
+  
 
-  const firebooster =
-    user.gameInfo.fireboosters[
-      user.gameInfo.fireboosters.push({
-        timeLeft: item.flameIncrementDuration,
-        flameIncrement: item.flameIncrement,
-        flameMultiplier: 1,
-      }) - 1
-    ];
-
-    startFireBoosterTimer(firebooster,userSubject)
+  startFireBoosterTimer(fireboosterKey, userSubject);
 
   return newUser;
 }
 export function insertFirewoodItem(user: User, item: FirewoodItem): User {
   if (!user.inventory.firewoodItems[item.name]) return user;
-  const newUser: User = cloneFirewoodItems(user, cloneUserDepth2(user));
+  const newUser: User = cloneFirewoodComponents(
+    user,
+    cloneFirewoodItems(user, cloneUserDepth2(user))
+  );
 
   newUser.inventory.firewoodItems[item.name].quantity--;
   if (newUser.inventory.firewoodItems[item.name].quantity === 0)
@@ -183,24 +193,23 @@ export function insertFirewoodItem(user: User, item: FirewoodItem): User {
 
 export function clockFireBooster(
   user: User,
-  firebooster: FireBooster,
+  fireboosterIndex: string,
   sub: Subscription,
   userSubject: BehaviorSubject<User>
 ): User {
-  firebooster.timeLeft--;
-  if (firebooster.timeLeft == 0) {
+  user.gameInfo.fireboosters[fireboosterIndex].timeLeft--;
+  if (user.gameInfo.fireboosters[fireboosterIndex].timeLeft == 0) {
     sub.unsubscribe();
-    userSubject.next(removeFireBooster(user, firebooster));
+    userSubject.next(removeFireBooster(user, fireboosterIndex));
     updateUserObs(user);
   }
   return user;
 }
-export function removeFireBooster(user: User, firebooster: FireBooster): User {
-  user.gameInfo.fireboosters = user.gameInfo.fireboosters.filter(
-    (booster) => booster !== firebooster
-  );
-  user.gameInfo.totalFlameIncrement -= firebooster.flameIncrement;
-  user.gameInfo.totalFlameMultiplier /= firebooster.flameMultiplier;
+export function removeFireBooster(user: User, fireboosterIndex: string): User {
+  
+  user.gameInfo.totalFlameIncrement -= user.gameInfo.fireboosters[fireboosterIndex].flameIncrement;
+  user.gameInfo.totalFlameMultiplier /= user.gameInfo.fireboosters[fireboosterIndex].flameMultiplier;
+  delete user.gameInfo.fireboosters[fireboosterIndex];
   return user;
 }
 
@@ -225,6 +234,14 @@ export function cloneFirestarterItems(src: User, dest: User): User {
   getDictElements(dest.inventory.firestarterItems).forEach((x) => {
     dest.inventory.firestarterItems[x] = {
       ...src.inventory.firestarterItems[x],
+    };
+  });
+  return dest;
+}
+export function cloneFirewoodComponents(src: User, dest: User): User {
+  getDictElements(dest.gameInfo.firewood).forEach((prop) => {
+    dest.gameInfo.firewood[prop] = {
+      ...src.gameInfo.firewood[prop],
     };
   });
   return dest;

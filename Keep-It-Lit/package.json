@@ -28,6 +28,7 @@
     "@fortawesome/fontawesome-free": "^5.15.3",
     "guid-typescript": "^1.0.9",
     "json-server": "^0.16.3",
+    "nanoid": "^3.1.23",
     "rxjs": "^7.1.0"
   }
 }

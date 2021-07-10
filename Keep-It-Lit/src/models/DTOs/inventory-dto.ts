@@ -1,4 +1,4 @@
-import { from, zip } from "rxjs";
+import { from, Observable, zip } from "rxjs";
 import { concatMap, filter, map, toArray } from "rxjs/operators";
 import { getDictElements } from "../../misc/Dictionary";
 import {
@@ -15,7 +15,7 @@ export interface InventoryDTO {
   firestarterItems: Array<InventoryItem<number>>;
 }
 
-export function inventoryDTOtoInventoryObs(inventoryDTO: InventoryDTO) {
+export function inventoryDTOtoInventoryObs(inventoryDTO: InventoryDTO):Observable<Inventory> {
   return zip(
     from(inventoryDTO.firewoodItems)
       .pipe(

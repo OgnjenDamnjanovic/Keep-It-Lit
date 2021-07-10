@@ -3,8 +3,6 @@ import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import {
   distinctUntilKeyChanged,
   map,
-  share,
-  switchMap,
   tap,
   withLatestFrom,
 } from "rxjs/operators";

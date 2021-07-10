@@ -20,10 +20,10 @@ export class Game implements DisposableView {
   }
 
   renderContent() {
-    createImage(this._container,'fullMark',IMAGES_LOCATION+"fullMark.jpg",1400,900)
+    new FireplaceView(this._container,this.userSubject).renderContent();
     new InventoryView(this._container,this.userSubject).renderContent();
     new StoreView(this._container, this.userSubject).renderContent();
-    new FireplaceView(this._container,this.userSubject).renderContent();
+    
     
     
   }

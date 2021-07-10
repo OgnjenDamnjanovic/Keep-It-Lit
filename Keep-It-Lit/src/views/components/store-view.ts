@@ -3,8 +3,6 @@ import {
   distinctUntilKeyChanged,
   filter,
   map,
-  share,
-  switchMap,
   tap,
   withLatestFrom,
 } from "rxjs/operators";
@@ -37,7 +35,7 @@ export class StoreView {
     this.userSubject = userSubject;
     this.userSubject
       .pipe(distinctUntilKeyChanged("balance"))
-      .subscribe((user) => {
+      .subscribe((user) => { 
         this.disableExpensiveItems(user.balance);
         this.renderBalance(user.balance);
       });
@@ -47,7 +45,7 @@ export class StoreView {
     const leftArrow =
       "<i class='fas fa-caret-left'></i><div>S<br/>T<br/>O<br/>R<br/>E</div>";
     const rightArrow =
-      "<i class='fas fa-caret-right'></i><div>S<br/>T<br/>O<br/>R<br/>E</div>";
+      "<i class='fas fa-caret-right'></i><div>S<br/>T<br/>O<br/>R<br/>E</div>";//dynamic icons?
     createElement("div", this._container, "storeSpacer", "");
     const showStoreBtn: HTMLButtonElement = createButton(
       this._container,
@@ -135,7 +133,7 @@ export class StoreView {
       itemContainer,
       "click"
     ).pipe(
-      withLatestFrom(this.userSubject),
+      withLatestFrom(this.userSubject),//da li moze switchmap?
       filter((evUser) => item.price <= evUser[1].balance),
       map((evAndUser) => buyItemCallback(evAndUser[1], item)),
       tap(user=>updateUserObs(user))

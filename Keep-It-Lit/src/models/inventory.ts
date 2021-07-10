@@ -2,7 +2,7 @@ import { Dictionary, getDictElements, sameDictKeys } from "../misc/Dictionary";
 import { FirestarterItem } from "./firestarter-item";
 import { FirewoodItem } from "./firewood-item";
 import { FlammableItem } from "./flammable-item";
-import { InventoryItem } from "./inventory-item";
+import { areSameInventoryItems, InventoryItem } from "./inventory-item";
 
 export interface Inventory {
   flammableItems: Dictionary<InventoryItem<FlammableItem>>;
@@ -72,9 +72,4 @@ export function areSameInventories(invA: Inventory, invB: Inventory): boolean {
   console.log("::true");
   return true;
 }
-export function areSameInventoryItems<T>(
-  item1: InventoryItem<T>,
-  item2: InventoryItem<T>
-): boolean {
-  return item1.quantity === item2.quantity && item1.item === item2.item;
-}
+
