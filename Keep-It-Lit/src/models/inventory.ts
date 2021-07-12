@@ -31,6 +31,7 @@ export function createInventory(
   firestarterItems.map(
     (item) => (newInventory.firestarterItems[item.item.name] = item)
   );
+  
   return newInventory;
 }
 
@@ -69,7 +70,7 @@ export function areSameInventories(invA: Inventory, invB: Inventory): boolean {
     )
       return false;
   }
-  console.log("::true");
+  
   return true;
 }
 

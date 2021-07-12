@@ -1,4 +1,4 @@
-import { BehaviorSubject, fromEvent, Observable, zip } from "rxjs";
+import { BehaviorSubject, fromEvent, Observable, Subscription, zip } from "rxjs";
 import {
   distinctUntilKeyChanged,
   filter,
@@ -11,12 +11,12 @@ import { FirestarterItem } from "../../models/firestarter-item";
 import { FirewoodItem } from "../../models/firewood-item";
 import { FlammableItem } from "../../models/flammable-item";
 import { Store } from "../../models/store";
+import { User } from "../../models/user";
 import {
-  buyFirestarterItem,
   buyFirewoodItem,
   buyFlammableItem,
-  User,
-} from "../../models/user";
+  buyFirestarterItem,
+} from "../../reducers/store.reducer";
 import { getAllStoreItems } from "../../services/DB services/store.service";
 import { updateUserObs } from "../../services/DB services/user.service";
 import {
@@ -24,28 +24,31 @@ import {
   createElement,
   createImage,
 } from "../../services/DOM.service";
+import { DisposableView } from "../page-interfaces/DisposableView";
 
-export class StoreView {
-  private userSubject: BehaviorSubject<User>;
+export class StoreView implements DisposableView{
+  private balanceSubscription:Subscription;
   private _container: HTMLFormElement;
-  constructor(mainContainer: HTMLElement, userSubject: BehaviorSubject<User>) {
+  constructor(mainContainer: HTMLElement, private userSubject: BehaviorSubject<User>) {
     this._container = <HTMLFormElement>(
       createElement("div", mainContainer, "storeContainer", "")
     );
-    this.userSubject = userSubject;
-    this.userSubject
+    this.balanceSubscription=this.userSubject
       .pipe(distinctUntilKeyChanged("balance"))
-      .subscribe((user) => { 
+      .subscribe((user) => {
         this.disableExpensiveItems(user.balance);
         this.renderBalance(user.balance);
       });
+  }
+  dispose(): void {
+    this.balanceSubscription.unsubscribe()
   }
 
   renderContent() {
     const leftArrow =
       "<i class='fas fa-caret-left'></i><div>S<br/>T<br/>O<br/>R<br/>E</div>";
     const rightArrow =
-      "<i class='fas fa-caret-right'></i><div>S<br/>T<br/>O<br/>R<br/>E</div>";//dynamic icons?
+      "<i class='fas fa-caret-right'></i><div>S<br/>T<br/>O<br/>R<br/>E</div>";
     createElement("div", this._container, "storeSpacer", "");
     const showStoreBtn: HTMLButtonElement = createButton(
       this._container,
@@ -129,14 +132,13 @@ export class StoreView {
       "storeItemPrice",
       `<label>${item.price}</label> <i class='fa fa-coins'></i>`
     ).setAttribute("price", item.price.toString());
-   fromEvent(
-      itemContainer,
-      "click"
-    ).pipe(
-      withLatestFrom(this.userSubject),//da li moze switchmap?
-      filter((evUser) => item.price <= evUser[1].balance),
-      map((evAndUser) => buyItemCallback(evAndUser[1], item)),
-      tap(user=>updateUserObs(user))
-    ).subscribe(this.userSubject);
+    fromEvent(itemContainer, "click")
+      .pipe(
+        withLatestFrom(this.userSubject), 
+        filter((evUser) => item.price <= evUser[1].balance),
+        map((evAndUser) => buyItemCallback(evAndUser[1], item)),
+        tap((user) => updateUserObs(user))
+      )
+      .subscribe(this.userSubject);
   }
 }

@@ -1,3 +1,22 @@
+
+.stats{
+  position: absolute;
+  top: 920px;
+  left: 100px;
+  white-space: pre-wrap
+}
+.log{
+  position: absolute;
+  left: 226px;
+  top: 678px;
+}
+.fireHolder{
+  position: absolute;
+  left: 255px;
+  top: 520px;
+  display: flex;
+  flex-direction: column;
+}
 .inventoryContainer {
   display: flex;
   flex-direction: column;

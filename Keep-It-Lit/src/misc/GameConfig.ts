@@ -1,1 +1,11 @@
-export const INITIAL_BALANCE=1000;
+export const INITIAL_BALANCE=10000;
+export const FIRE_LEVEL1_TRASHOLD=10;
+export const FIRE_LEVEL2_TRASHOLD=30;
+export const FIRE_LEVEL3_TRASHOLD=60;
+export const FIRE_LEVEL4_TRASHOLD=100;
+export const FIRE_GIF_RATIO=0.69;
+export const LOG_TRASHOLD=29
+export const EMBER_TO_ASH_FACTOR=0.5;
+export const BURN_FACTOR=0.0003;
+export const AMBER_TO_FIRE_RATIO=2;
+export const MONEY_INCREMENT=3000;

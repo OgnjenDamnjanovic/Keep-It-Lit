@@ -1,4 +1,4 @@
-import { fromEvent, Observable, zip } from "rxjs";
+import { fromEvent, Subscription } from "rxjs";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import {
   distinctUntilKeyChanged,
@@ -13,29 +13,37 @@ import { FirewoodItem } from "../../models/firewood-item";
 import { FlammableItem } from "../../models/flammable-item";
 import { areSameInventories, Inventory } from "../../models/inventory";
 import { InventoryItem } from "../../models/inventory-item";
+import { User } from "../../models/user";
 import {
   insertFirestarterItem,
   insertFirewoodItem,
   insertFlammableItem,
-  User,
-} from "../../models/user";
+} from "../../reducers/fireplace.reducer";
 import { updateUserObs } from "../../services/DB services/user.service";
 import { createElement, createImage } from "../../services/DOM.service";
+import { DisposableView } from "../page-interfaces/DisposableView";
 
-export class InventoryView {
-  private userSubject: BehaviorSubject<User>;
+export class InventoryView implements DisposableView {
+  private inventorySubscription: Subscription;
   private _container: HTMLFormElement;
-  constructor(mainContainer: HTMLElement, userSubject: BehaviorSubject<User>) {
+  constructor(
+    mainContainer: HTMLElement,
+    private userSubject: BehaviorSubject<User>
+  ) {
     this._container = <HTMLFormElement>(
       createElement("div", mainContainer, "inventoryContainer", "")
     );
-    this.userSubject = userSubject;
+  }
+  dispose(): void {
+   this.inventorySubscription.unsubscribe();
   }
 
   renderContent() {
-    this.userSubject
+    this.inventorySubscription = this.userSubject
       .pipe(distinctUntilKeyChanged("inventory", areSameInventories))
-      .subscribe((User) => this.renderInventory(User.inventory));
+      .subscribe((User) => {
+        this.renderInventory(User.inventory);
+      });
   }
   renderInventory(inventory: Inventory) {
     this._container.innerHTML = "";
@@ -98,7 +106,7 @@ export class InventoryView {
         map((evAndUser) =>
           insertCallback(evAndUser[1], item.item, this.userSubject)
         ),
-        tap((user) => updateUserObs(user)) //da subscribe ne ceka upis, pa da vrati user-a koji je u medjuvremenu izmenjen zbog timera
+        tap((user) => updateUserObs(user))
       )
       .subscribe(this.userSubject);
   }
