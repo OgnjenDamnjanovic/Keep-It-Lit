@@ -17,7 +17,7 @@ export function createUser(
   password: string
 ): Observable<Response> {
   return from(
-    fetch("http://localhost:3000/users", {
+    fetch(USERS_URL, {
       method: "POST",
       body: JSON.stringify(createInitialUserDTO(username, password)),
       headers: {
@@ -67,7 +67,7 @@ export function checkUsernameExistsObs(username: string): Observable<boolean> {
 }
 export function updateUserObs(user: User): Observable<Response> {
   return from(
-    fetch("http://localhost:3000/users/" + user.id, {
+    fetch(USERS_URL + user.id, {
       method: "PUT",
       body: JSON.stringify(userToUserDTO(user)),
       headers: {
