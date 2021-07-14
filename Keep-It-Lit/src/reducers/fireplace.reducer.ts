@@ -1,6 +1,6 @@
 import { BehaviorSubject, Subscription, timer } from "rxjs";
 import { map, withLatestFrom } from "rxjs/operators";
-import { AMBER_TO_FIRE_RATIO, BURN_FACTOR, EMBER_TO_ASH_FACTOR, MONEY_INCREMENT } from "../misc/GameConfig";
+import { AMBER_TO_FIRE_RATIO, BURN_FACTOR, EMBER_TO_ASH_FACTOR, MAX_BASE_FIRE_LEVEL, MONEY_INCREMENT } from "../misc/GameConfig";
 import { evaluateFireLevel } from "../models/fireplace";
 import { FirestarterItem } from "../models/firestarter-item";
 import { FirewoodItem } from "../models/firewood-item";
@@ -35,10 +35,12 @@ export function burn(user: User, burnPercent: number): User {
 
   newUser.gameInfo.emberAmount += totalBurnt;
   newUser.gameInfo.flameBaseLevel = newUser.gameInfo.emberAmount*AMBER_TO_FIRE_RATIO;
+  if(newUser.gameInfo.flameBaseLevel>MAX_BASE_FIRE_LEVEL) newUser.gameInfo.flameBaseLevel=MAX_BASE_FIRE_LEVEL;
   if(newUser.gameInfo.flameBaseLevel>0)
   newUser.balance+=MONEY_INCREMENT;
   return Object.freeze(newUser);
 }
+
 export function insertFirewoodItem(user: User, item: FirewoodItem): User {
   const newUser: User = cloneUserDepth2(user);
   newUser.inventory.firewoodItems[item.name] = {

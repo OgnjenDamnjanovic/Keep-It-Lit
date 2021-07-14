@@ -52,7 +52,7 @@ export class FireplaceView implements DisposableView {
 
     const stop = new Subject<void>();
     const start = new Subject<void>();
-    const burnTimeMS = 5000;
+    const burnTimeMS = 3000;
     let startTime: number = Date.now();
     this.burnTimerSubscription = timer(burnTimeMS, burnTimeMS)
       .pipe(

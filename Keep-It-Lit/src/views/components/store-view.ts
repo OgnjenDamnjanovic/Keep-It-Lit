@@ -1,4 +1,8 @@
-import { BehaviorSubject, fromEvent, Observable, Subscription, zip } from "rxjs";
+import {
+  BehaviorSubject,
+  fromEvent,
+  Subscription,
+} from "rxjs";
 import {
   distinctUntilKeyChanged,
   filter,
@@ -26,25 +30,28 @@ import {
 } from "../../services/DOM.service";
 import { DisposableView } from "../page-interfaces/DisposableView";
 
-export class StoreView implements DisposableView{
-  private balanceSubscription:Subscription;
+export class StoreView implements DisposableView {
+  private balanceSubscription: Subscription;
   private _container: HTMLFormElement;
-  constructor(mainContainer: HTMLElement, private userSubject: BehaviorSubject<User>) {
+  constructor(
+    mainContainer: HTMLElement,
+    private userSubject: BehaviorSubject<User>
+  ) {
     this._container = <HTMLFormElement>(
       createElement("div", mainContainer, "storeContainer", "")
     );
-    this.balanceSubscription=this.userSubject
+  }
+  dispose(): void {
+    this.balanceSubscription.unsubscribe();
+  }
+
+  renderContent() {
+    this.balanceSubscription = this.userSubject
       .pipe(distinctUntilKeyChanged("balance"))
       .subscribe((user) => {
         this.disableExpensiveItems(user.balance);
         this.renderBalance(user.balance);
       });
-  }
-  dispose(): void {
-    this.balanceSubscription.unsubscribe()
-  }
-
-  renderContent() {
     const leftArrow =
       "<i class='fas fa-caret-left'></i><div>S<br/>T<br/>O<br/>R<br/>E</div>";
     const rightArrow =
@@ -134,7 +141,7 @@ export class StoreView implements DisposableView{
     ).setAttribute("price", item.price.toString());
     fromEvent(itemContainer, "click")
       .pipe(
-        withLatestFrom(this.userSubject), 
+        withLatestFrom(this.userSubject),
         filter((evUser) => item.price <= evUser[1].balance),
         map((evAndUser) => buyItemCallback(evAndUser[1], item)),
         tap((user) => updateUserObs(user))

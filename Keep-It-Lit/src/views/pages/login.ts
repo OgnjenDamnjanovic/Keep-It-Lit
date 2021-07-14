@@ -40,7 +40,6 @@ export class Login {
     createButton(this._container, "loginSubmitBtn", "Login", null);
     this._container.onsubmit = () => {
       getUserObs(usernameInput.value, passwordInput.value).subscribe({
-        //predlozeno u dokumentaciji za kad se handle greska
         next: (user:User) => Router.Navigator.goTo(Page.Game,user),
         error: (e) => {
           if (e.message === ErrorCodes.userNotFound.toString())

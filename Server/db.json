@@ -4,28 +4,25 @@
       "id": 0,
       "name": "branches",
       "imageSrc": "branches.jpg",
-      "combustionFactor": 0.05,
+      "combustionFactor": 1.3,
       "firewoodContribution": 3000,
-      "price": 50,
-      "inStock": 20
+      "price": 50
     },
     {
       "id": 1,
       "name": "log",
       "imageSrc": "log.jpg",
-      "combustionFactor": 0.1,
+      "combustionFactor": 0.4,
       "firewoodContribution": 10000,
-      "price": 700,
-      "inStock": 15
+      "price": 700
     },
     {
       "id": 2,
       "name": "splitLog",
       "imageSrc": "split_log.png",
-      "combustionFactor": 0.09,
+      "combustionFactor": 0.8,
       "firewoodContribution": 7000,
-      "price": 300,
-      "inStock": 15
+      "price": 300
     }
   ],
   "flammableItems": [
@@ -35,8 +32,7 @@
       "imageSrc": "thinner.jpg",
       "flameMultiplier": 2,
       "flameMultiplierDuration": 10,
-      "price": 6000,
-      "inStock": 2
+      "price": 6000
     },
     {
       "id": 1,
@@ -44,8 +40,7 @@
       "imageSrc": "waterglass.jpg",
       "flameMultiplier": 0.6,
       "flameMultiplierDuration": 15,
-      "price": 100,
-      "inStock": 2
+      "price": 100
     }
   ],
   "firestarterItems": [
@@ -57,8 +52,7 @@
       "flameIncrementDuration": 8,
       "firewoodContribution": 5,
       "combustionFactor": 3,
-      "price": 100,
-      "inStock": 2
+      "price": 100
     },
     {
       "id": 1,
@@ -68,8 +62,7 @@
       "flameIncrementDuration": 11,
       "firewoodContribution": 0,
       "combustionFactor": 0,
-      "price": 3000,
-      "inStock": 2
+      "price": 3000
     },
     {
       "id": 2,
@@ -79,50 +72,29 @@
       "flameIncrementDuration": 15,
       "firewoodContribution": 45,
       "combustionFactor": 1,
-      "price": 2000,
-      "inStock": 2
+      "price": 2000
     }
   ],
   "users": [
     {
       "id": 1,
-      "balance": 5854170,
+      "balance": 5980070,
       "password": "1234",
       "username": "ognjen",
       "gameInfo": {
-        "emberAmount": 715.5952274274206,
-        "flameBaseLevel": 1431.1904548548412,
-        "fireboosters": {
-          "1626050913539": {
-            "timeLeft": 66,
-            "flameIncrement": 0,
-            "flameMultiplier": 0.6
-          },
-          "1626050915036": {
-            "timeLeft": 67,
-            "flameIncrement": 0,
-            "flameMultiplier": 0.6
-          },
-          "1626050919477": {
-            "timeLeft": 72,
-            "flameIncrement": 0,
-            "flameMultiplier": 0.6
-          }
-        },
-        "totalFlameMultiplier": 0.216,
+        "emberAmount": 1107.3423426692898,
+        "flameBaseLevel": 553.6711713346449,
+        "fireboosters": {},
+        "totalFlameMultiplier": 1,
         "totalFlameIncrement": 0,
         "firewood": {
           "log": {
-            "combustionFactor": 0.1,
-            "totalFirewoodContribution": 13134.98094639512
+            "combustionFactor": 0.4,
+            "totalFirewoodContribution": 3148.480915362282
           },
           "splitLog": {
-            "combustionFactor": 0.09,
-            "totalFirewoodContribution": 4802.368566983363
-          },
-          "branches": {
-            "combustionFactor": 0.05,
-            "totalFirewoodContribution": 2442.5147087425103
+            "combustionFactor": 0.8,
+            "totalFirewoodContribution": 158.82671415839917
           }
         }
       },
@@ -134,52 +106,37 @@
           },
           {
             "item": 1,
-            "quantity": 37
+            "quantity": 36
           },
           {
             "item": 2,
-            "quantity": 34
+            "quantity": 29
           }
         ],
         "firewoodItems": [
           {
             "item": 0,
-            "quantity": 33
+            "quantity": 16
           },
           {
             "item": 2,
-            "quantity": 18
+            "quantity": 11
+          },
+          {
+            "item": 1,
+            "quantity": 7
           }
         ],
         "flammableItems": [
           {
-            "item": 0,
-            "quantity": 5
-          },
-          {
             "item": 1,
             "quantity": 16
+          },
+          {
+            "item": 0,
+            "quantity": 12
           }
         ]
-      }
-    },
-    {
-      "id": "a55cace8-4e05-4b9d-e60b-8c9c5f75fdfb",
-      "username": "3131",
-      "password": "123",
-      "gameInfo": {
-        "emberAmount": 0,
-        "flameBaseLevel": 0,
-        "fireboosters": {},
-        "totalFlameMultiplier": 1,
-        "totalFlameIncrement": 0,
-        "firewood": {}
-      },
-      "balance": 10000,
-      "inventory": {
-        "firewoodItems": [],
-        "flammableItems": [],
-        "firestarterItems": []
       }
     }
   ]
